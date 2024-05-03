@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>To-Do List App</title>
+  <link rel="shortcut icon" href="3208723.png">
+  <style> 
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    #taskInput {
+      display: block;
+      width: 100%;
+      padding: 8px;
+      font-size: 16px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    #taskList {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      margin-bottom: 8px;
+      background-color: #fff;
+    }
+
+    .completed {
+      text-decoration: line-through;
+    }
+
+    button {
+      background-color: #dc3545;
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #c82333;
+    }
+  </style>
+</head>
+<body>
+  <h1>To-Do List</h1>
+  <input type="text" id="taskInput" placeholder="Enter your task">
+  <button onclick="addTask()">Add Task</button>
+  <ul id="taskList"></ul>
+
+  <script>
+    function addTask() {
+      const taskInput = document.getElementById('taskInput');
+      const taskList = document.getElementById('taskList');
+
+      if (taskInput.value.trim() !== '') {
+        const li = document.createElement('li');
+        li.textContent = taskInput.value.trim();
+
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+        deleteButton.onclick = function() {
+          taskList.removeChild(li);
+        };
+
+        const editButton = document.createElement('button');
+        editButton.textContent = 'Edit';
+        editButton.onclick = function() {
+          editTask(li);
+        };
+
+        const checkbox = document.createElement('input'); 
+        checkbox.type = 'checkbox';
+        checkbox.addEventListener('change', function() {
+          toggleCompleted(li, checkbox);
+        });
+
+        li.appendChild(checkbox); 
+        li.appendChild(deleteButton);
+        li.appendChild(editButton);
+        taskList.appendChild(li);
+        taskInput.value = '';
+      }
+    }
+
+    function editTask(li) {
+      const taskText = li.textContent;
+
+      const editInput = document.createElement('input');
+      editInput.type = 'text';
+      editInput.value = taskText;
+      editInput.className = 'edit-input';
+
+      const saveButton = document.createElement('button');
+      saveButton.textContent = 'Save';
+      saveButton.className = 'edit-save';
+
+      saveButton.onclick = function() {
+        const editedText = editInput.value;
+        li.textContent = editedText; 
+        li.appendChild(checkbox); 
+        li.appendChild(deleteButton);
+        li.appendChild(editButton);
+      };
+
+      const deleteButton = document.createElement('button');
+      deleteButton.textContent = 'Delete';
+      deleteButton.onclick = function() {
+        taskList.removeChild(li);
+      };
+
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.addEventListener('change', function() {
+        toggleCompleted(li, checkbox);
+      });
+
+      li.textContent = ''; 
+      li.appendChild(editInput);
+      li.appendChild(saveButton);
+      li.appendChild(deleteButton);
+      li.appendChild(checkbox);
+    }
+
+    function toggleCompleted(li, checkbox) {
+      if (checkbox.checked) {
+        li.classList.add('completed');
+      } else {
+        li.classList.remove('completed');
+      }
+    }
+
+    document.getElementById('taskInput').addEventListener('keypress', function(event) {
+      if (event.key === 'Enter') {
+        addTask();
+      }
+    });
+  </script>
+</body>
+</html>
